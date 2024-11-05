@@ -28,29 +28,23 @@ import javafx.scene.text.FontWeight;
 
 import java.util.Set;
 
-
 public class GameScreen extends DynamicScene implements EntitySpawnerContainer, KeyListener {
 
     private TextEntity playerLivesText;
     private TextEntity scoreText;
     private TextEntity levelText;
-
     private TextEntity pauseText;
 
     protected App app;
     private Player player;
-
     private boolean isPaused;
     private final EntitySpawner weaponTypeSpawner;
-
     private Level level = new Level();
 
     public GameScreen(App app) {
         this.app = app;
-        this.level = level;
         this.weaponTypeSpawner = new LaserGun(10);
     }
-
 
     public TextEntity getScoreText() {
         return scoreText;
