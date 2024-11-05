@@ -1,13 +1,13 @@
-Work in progress!
-An object oriented adventure, written in Java. Using the HAN Yaeger Game Engine.
-Sinds creating this game in june 2024, i've learnt a lot and thought it was time to make a version 2. Refactoring, reducing code smells, improving structure ect. 
+Work in progress!<br>
+An object oriented adventure, written in Java. Using the HAN Yaeger Game Engine.<br>
+Since creating this game in june 2024, i've learnt a lot and thought it was time to make a version 2. <br> Refactoring, reducing code smells, improving structure ect. <br>
 
-Refactored:
-App
-Helper
-Package Scenes
+Refactored:<br>
+App<br>
+Helper<br>
+Package Scenes <br>
 
-Much more refactoring to go!
-
+Much more refactoring to go!<br>
+<br>
 Original game version 1.0:
 https://github.com/MarzSP/ImperialDestruction
