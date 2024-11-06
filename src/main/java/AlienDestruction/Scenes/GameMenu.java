@@ -21,25 +21,25 @@ public class GameMenu extends MenuManager {
         setBackgroundImage("backgrounds/universe1.jpg");
     }
 
-    /**
-     * setupEntities() overschrijft de abstracte setupEntities() methode van MenuManager.
-     * Het voegt de volgende elementen toe aan het menu:
-     *     Een tekst element met de titel "Game Menu" gecentreerd bovenaan het scherm.
-     *     Een "Quit Game" knop onderaan het scherm. De QuitGameButton is een eigen class.
-     */
     @Override
     public void setupEntities() {
         super.setupEntities();
+        addGameMenuText();
+        addQuitGameButton();
+    }
+
+    private void addGameMenuText() {
         var gameMenuText = new TextEntity(
                 new Coordinate2D(getWidth() / 2, getHeight() / 4),
                 "Game Menu");
         gameMenuText.setAnchorPoint(AnchorPoint.TOP_CENTER);
         gameMenuText.setFill(Color.ANTIQUEWHITE);
-        gameMenuText.setFont(Font.font("Roboto", FontWeight.SEMI_BOLD, getWidth()/25));
+        gameMenuText.setFont(Font.font("Roboto", FontWeight.SEMI_BOLD, getWidth() / 25));
         addEntity(gameMenuText);
+    }
 
-        var quitGameButton = new QuitGameButton(new Coordinate2D(getWidth() / 2, getHeight() * 5/6), "Quit Game");
+    private void addQuitGameButton() {
+        var quitGameButton = new QuitGameButton(new Coordinate2D(getWidth() / 2, getHeight() * 5 / 6), "Quit Game");
         addEntity(quitGameButton);
-
     }
 }
