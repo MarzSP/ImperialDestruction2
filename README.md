@@ -6,6 +6,8 @@ Refactored:<br>
 App<br>
 Helper<br>
 Package Scenes <br>
+Package MenuBar <br>
+Most of package Game <br>
 
 Much more refactoring to go!<br>
 <br>
