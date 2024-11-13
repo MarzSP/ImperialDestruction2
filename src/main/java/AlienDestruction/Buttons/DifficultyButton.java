@@ -42,8 +42,6 @@ public class DifficultyButton extends Button {
 
     /**
      *onMouseButtonPressed(MouseButton button, Coordinate2D coordinate2D) (overridden): Deze methode wordt opgeroepen wanneer er op de knop geklikt wordt
-     * @param button
-     * @param coordinate2D
      */
 
     @Override

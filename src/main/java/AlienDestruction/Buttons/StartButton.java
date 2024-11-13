@@ -10,10 +10,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 
-/**
- * De StartButton klasse is een sub-klasse van de abstracte Button klasse en specificeert de knop om het spel te starten.
- * Implements: MouseButtonPressedListener
- */
 public class StartButton extends Button implements MouseButtonPressedListener {
 
     protected App app;
