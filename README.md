@@ -8,6 +8,8 @@ Helper<br>
 Package Scenes <br>
 Package MenuBar <br>
 Most of package Game <br>
+New Package Obstacles with Abstract Obstacle <br> 
+New Package Enemies, not yet refactored to interface <br>
 
 Much more refactoring to go!<br>
 <br>
