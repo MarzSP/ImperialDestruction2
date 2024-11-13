@@ -1,6 +1,8 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Enemies;
 
 
+import AlienDestruction.Entities.GameEntities;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
@@ -12,13 +14,14 @@ import com.github.hanyaeger.api.scenes.SceneBorder;
  * EnemyOne erft: zie constructor
  *
  */
-public class EnemyOne extends GameEntities {
+public class
+EnemyOne extends GameEntities {
     /**
      *  Player player is final:
      *  Dit betekent dat de EnemyOne-instantie altijd een geldige referentie naar de Player-instantie heeft.
      *  Dit voorkomt dat er fouten optreden door null-waarden of ongeldige verwijzingen.
      *  */
-    private final  Player player;
+    private final Player player;
 
 /**
  * Constructor:

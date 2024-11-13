@@ -1,7 +1,7 @@
 package AlienDestruction.Entities;
 
+import AlienDestruction.Entities.Enemies.EnemyFour;
 import AlienDestruction.Helper;
-import AlienDestruction.Scenes.GameMenu;
 import AlienDestruction.Weapons.LaserBeam;
 import AlienDestruction.Weapons.WeaponType;
 import com.github.hanyaeger.api.Coordinate2D;

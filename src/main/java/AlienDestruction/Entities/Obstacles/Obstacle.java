@@ -1,5 +1,7 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Obstacles;
 
+import AlienDestruction.Entities.GameEntities;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import AlienDestruction.Weapons.LaserBeam;
 import AlienDestruction.Weapons.WeaponType;

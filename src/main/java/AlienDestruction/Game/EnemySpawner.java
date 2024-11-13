@@ -2,39 +2,40 @@ package AlienDestruction.Game;
 
 import AlienDestruction.App;
 import AlienDestruction.Entities.*;
+import AlienDestruction.Entities.Enemies.*;
+import AlienDestruction.Entities.Obstacles.*;
 import AlienDestruction.Helper;
 import AlienDestruction.Scenes.GameScreen;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.entities.EntitySpawner;
 import com.github.hanyaeger.api.entities.impl.TextEntity;
 
-
-import java.util.Random;
-
 public class EnemySpawner extends EntitySpawner {
 
+    private static final int SPAWN_INTERVAL = 1200;
+    private static final int INITIAL_Y_POSITION = -40;
+
     private final Player player;
-
     private final Level level;
-
     private final GameScreen gameScreen;
     private int enemyTypeIndex = 0;
-
-    int[][] levelData;
+    private int[][] levelData;
     int difficulty;
 
-
     public EnemySpawner(Player player, Level level, GameScreen gameScreen, App app) {
-        super(1200);
-        this.level = level;
+        super(SPAWN_INTERVAL);
         this.player = player;
+        this.level = level;
         this.gameScreen = gameScreen;
+        initializeLevelData(app.getDifficulty());
+    }
 
+    private void initializeLevelData(int difficulty) {
+        this.difficulty = difficulty;
         levelData = level.defineLevel();
-        difficulty = app.getDifficulty();
-        for (int lvl = 0; lvl < levelData.length; lvl++) {
-            for (int enemy = levelData[lvl].length - 1; enemy >= 0; enemy--) {
-                levelData[lvl][enemy] += difficulty;
+        for (int[] levelRow : levelData) {
+            for (int i = 0; i < levelRow.length; i++) {
+                levelRow[i] += difficulty;
             }
         }
     }
@@ -64,51 +65,40 @@ public class EnemySpawner extends EntitySpawner {
 
     private void resetAndIncreaseDifficulty() {
         level.setIndexLevelNumber(1);
-        for (int[] level : levelData) {
-            for (int enemy = level.length - 1; enemy >= 0; enemy--) {
-                level[enemy]++;
+        for (int[] levelRow : levelData) {
+            for (int i = 0; i < levelRow.length; i++) {
+                levelRow[i]++;
             }
         }
     }
 
-    public void spawnEnemyFromLevel(int enemyType){
-        GameEntities e;
-        int randomX = Helper.getRandomX(gameScreen.getWidth());
-
-        switch (enemyType) {
-            case 1:
-                e = new EnemyOne(new Coordinate2D(randomX, -40), player, getSpeedIncrease());
-                spawn(e);
-                break;
-            case 2: e = new EnemyTwo(new Coordinate2D(randomX, -40), player, getSpeedIncrease());
-                spawn(e);
-                break;
-            case 3: e = new EnemyThree(new Coordinate2D(randomX, -40), player, getSpeedIncrease());
-                spawn(e);
-                break;
-            case 4: e = new EnemyFour(new Coordinate2D(randomX, -40), player, getSpeedIncrease());
-                spawn(e);
-                break;
-            case 5: e = new ObstacleOne(new Coordinate2D(randomX, -40), player);
-                spawn(e);
-                break;
-            case 6: e = new ObstacleTwo(new Coordinate2D(randomX, -40), player);
-                spawn(e);
-                break;
-            default:
-                break;
+    private void spawnEnemyFromLevel(int enemyType) {
+        GameEntities enemy = createEnemy(enemyType);
+        if (enemy != null) {
+            spawn(enemy);
         }
     }
 
+    private GameEntities createEnemy(int enemyType) {
+        int randomX = Helper.getRandomX(gameScreen.getWidth());
+        Coordinate2D location = new Coordinate2D(randomX, INITIAL_Y_POSITION);
 
-    public void updateLevelText(){
-        TextEntity levelText;
+        return switch (enemyType) {
+            case 1 -> new EnemyOne(location, player, getSpeedIncrease());
+            case 2 -> new EnemyTwo(location, player, getSpeedIncrease());
+            case 3 -> new EnemyThree(location, player, getSpeedIncrease());
+            case 4 -> new EnemyFour(location, player, getSpeedIncrease());
+            case 5 -> new ObstacleOne(location, player);
+            case 6 -> new ObstacleTwo(location, player);
+            default -> null;
+        };
+    }
+
+    private void updateLevelText() {
         gameScreen.getLevelText().setText("Level: " + level.getPlayerLevelNumber());
     }
 
-    public double getSpeedIncrease() {
-        double increase = level.getPlayerLevelNumber() * 0.1;
-        return increase;
+    private double getSpeedIncrease() {
+        return level.getPlayerLevelNumber() * 0.1;
     }
 }
-

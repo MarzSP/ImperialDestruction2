@@ -1,21 +1,19 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Obstacles;
 
 
+import AlienDestruction.Entities.Obstacles.Obstacle;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
-import AlienDestruction.Weapons.LaserBeam;
 import AlienDestruction.Weapons.WeaponType;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
-import com.github.hanyaeger.api.entities.Collider;
 import com.github.hanyaeger.api.scenes.SceneBorder;
-
-import java.util.List;
 
 /**
  * De ObstacleOne klasse vertegenwoordigt een obstakel van type 2 in een game.
  *  * Het erft van de GameEntities klasse die de basis functionaliteit voor game-elementen verzorgt.
  */
-public class ObstacleTwo extends Obstacle{
+public class ObstacleTwo extends Obstacle {
 
     /**
      * ObstacleTwo(Coordinate2D location, Player player): Initialiseert de ObstacleTwo met een afbeelding, locatie, grootte en referentie naar de speler.

@@ -9,5 +9,8 @@ module AlienDestruction {
     opens backgrounds;
     opens sprites;
     exports AlienDestruction.Game;
+    exports AlienDestruction.Entities;
+    exports AlienDestruction.Entities.Obstacles;
+    exports AlienDestruction.Entities.Enemies;
 
 }

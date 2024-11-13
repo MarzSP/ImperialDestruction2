@@ -1,6 +1,8 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Enemies;
 
 
+import AlienDestruction.Entities.GameEntities;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
@@ -10,7 +12,7 @@ import com.github.hanyaeger.api.scenes.SceneBorder;
  * EnemyFour erft: zie constructor
  **/
 
-public class EnemyFour extends GameEntities{
+public class EnemyFour extends GameEntities {
 
     /**
      * Constructor:

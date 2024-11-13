@@ -1,6 +1,8 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Enemies;
 
 import AlienDestruction.App;
+import AlienDestruction.Entities.GameEntities;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import AlienDestruction.Scenes.GameScreen;
 import AlienDestruction.Weapons.LaserBeam;
@@ -17,7 +19,7 @@ import java.util.List;
  *  EnemyTwo erft: zie constructor
  */
 
-public class EnemyTwo extends GameEntities{
+public class EnemyTwo extends GameEntities {
     /**
      * Constructor:
      * EnemyTwo(Coordinate2D location, Player player, double speedIncrease):

@@ -1,5 +1,7 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Enemies;
 
+import AlienDestruction.Entities.GameEntities;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
@@ -8,7 +10,7 @@ import com.github.hanyaeger.api.scenes.SceneBorder;
    * EnemyThree:erft van de GameEntities klasse, dit is een vijand die niet kan schieten.
    * EnemyThree erft: zie constructor
 **/
-public class EnemyThree extends GameEntities{
+public class EnemyThree extends GameEntities {
     /**
      *   Player player is final:
      *  Dit betekent dat de EnemyThree-instantie altijd een geldige referentie naar de Player-instantie heeft.

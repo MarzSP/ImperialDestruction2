@@ -1,6 +1,8 @@
-package AlienDestruction.Entities;
+package AlienDestruction.Entities.Obstacles;
 
 
+import AlienDestruction.Entities.Obstacles.Obstacle;
+import AlienDestruction.Entities.Player;
 import AlienDestruction.Helper;
 import AlienDestruction.Weapons.LaserBeam;
 import AlienDestruction.Weapons.WeaponType;
@@ -11,7 +13,7 @@ import com.github.hanyaeger.api.scenes.SceneBorder;
 
 import java.util.List;
 
-public class ObstacleOne extends Obstacle{
+public class ObstacleOne extends Obstacle {
 
     public ObstacleOne(Coordinate2D location, Player player) {
         super("sprites/asteroidSquareV1.png", location, new Size(Helper.Size.LARGE,Helper.Size.LARGE), player);
