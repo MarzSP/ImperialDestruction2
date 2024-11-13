@@ -2,8 +2,7 @@ package AlienDestruction.Entities;
 
 import AlienDestruction.Entities.Enemies.EnemyFour;
 import AlienDestruction.Helper;
-import AlienDestruction.Weapons.LaserBeam;
-import AlienDestruction.Weapons.WeaponType;
+import AlienDestruction.Weapons.*;
 import com.github.hanyaeger.api.Coordinate2D;
 import com.github.hanyaeger.api.Size;
 import com.github.hanyaeger.api.Timer;
@@ -22,7 +21,7 @@ import java.util.List;
  *     DynamicSpriteEntity: Erft van de DynamicSpriteEntity klasse die functionaliteit biedt voor het hanteren van een bewegende sprite entity met een afbeelding.
  *     SceneBorderTouchingWatcher: Implementeert de SceneBorderTouchingWatcher interface om te detecteren wanneer het object de rand van het scherm raakt.
  *     Newtonian: Implementeert de Newtonian interface om physics simulatie toe te passen (zwaartekracht).
- *     Collided: Implementeert de Collided interface om te detecteren wanneer het object met andere objecten botst. (Zoals bijv Speler met Vijand)
+ *     Collided: Implementeert de Collided interface om te detecteren wanneer het object met andere objecten botst. (Zoals bijv. Speler met Vijand)
  *     Collider: Implementeert de Collider interface voor detectie van botsingen
  *     Rotatable: Implementeert de Rotatable interface om rotatie van sprites mogelijk te maken
  *     SceneBorderCrossingWatcher: Implementeert de SceneBorderCrossingWatcher interface om te detecteren wanneer het objectbuiten de schermranden komt.
@@ -34,7 +33,7 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
     protected boolean allowedToFire;
     private final Size size;
     /**
-     * Player player is final:
+     * Player is final:
      * Dit betekent dat de EnemyFour-instantie altijd een geldige referentie naar de Player-instantie heeft.
      * Dit voorkomt dat er fouten optreden door null-waarden of ongeldige verwijzingen.
      */
@@ -82,13 +81,12 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
      * De laserstraal wordt afgevuurd vanaf het bovenste midden van het spelerobject.
      */
     public void shoot() {
-        boolean isSD = false;
         double x = getLocationInScene().getX() + (this.size.width() / 2);
         double y = getLocationInScene().getY();
+        boolean isSD = false;
         if (this instanceof EnemyFour) {
-            isSD = true;
-            player.getGun().shoot(new LaserBeam(false, new Coordinate2D(x - 40, y), this, isSD));
-            player.getGun().shoot(new LaserBeam(false, new Coordinate2D(x + 30, y), this, isSD));
+            player.getGun().shoot(new LaserBeam(false, new Coordinate2D(x - 40, y), this, true));
+            player.getGun().shoot(new LaserBeam(false, new Coordinate2D(x + 30, y), this, true));
         } else {
             player.getGun().shoot(new LaserBeam(false, new Coordinate2D(x, y), this, isSD));
         }
@@ -133,7 +131,7 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
         for (Collider collider : collidingObject){
             if (collider instanceof WeaponType weaponType){
 
-                // Dont get hit by your own laser beams
+                // Don't get hit by your own laser beams
                 if (weaponType.isOwnedBy(this)) {
                     break;
                 }
@@ -157,7 +155,7 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
      * @return newDirection de nieuwe richting waar de Entity heen gaat
      */
     public int calculateCourse(int oldDirection){
-        int newDirection = 0;
+        int newDirection;
         if (oldDirection < 359 && oldDirection > 271) {
             newDirection = 90 - (360-oldDirection);
         } else {
@@ -171,7 +169,7 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
      * @param damage de hoeveelheid hitPoints dat een Entity geeft
      */
     public void addDamage(double damage){
-        this.hitPoints -= damage;
+        this.hitPoints -= (int) damage;
     }
 
     /**
@@ -212,17 +210,11 @@ public class GameEntities extends DynamicSpriteEntity implements TimerContainer,
     public void bounceOffT(WeaponType collider){
         double randomBounce = Helper.getRandomDouble(-8.0, 8.0);
         switch (getHitGrid(collider)) {
-            case 1:
+            case 1, 4:
                 setNewColliderDirection(collider, 90 + randomBounce, 270 + randomBounce);
                 break;
-            case 2:
+            case 2, 3:
                 setNewColliderDirection(collider, 90 + randomBounce, 90 + randomBounce);
-                break;
-            case 3:
-                setNewColliderDirection(collider, 90 + randomBounce, 90+ randomBounce);
-                break;
-            case 4:
-                setNewColliderDirection(collider, 90 + randomBounce, 270 + randomBounce);
                 break;
             default:
                 break;

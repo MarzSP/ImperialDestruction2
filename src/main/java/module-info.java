@@ -12,5 +12,5 @@ module AlienDestruction {
     exports AlienDestruction.Entities;
     exports AlienDestruction.Entities.Obstacles;
     exports AlienDestruction.Entities.Enemies;
-
+    exports AlienDestruction.Weapons;
 }

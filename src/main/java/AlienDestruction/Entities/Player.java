@@ -90,6 +90,10 @@ public class Player extends DynamicSpriteEntity implements KeyListener, SceneBor
     }
     public void setScore(int score) {
         this.score = score;
+        updateScoreText();
+    }
+
+    private void updateScoreText() {
         gameScreen.getScoreText().setText("Score: " + this.getScore());
     }
 
@@ -97,11 +101,7 @@ public class Player extends DynamicSpriteEntity implements KeyListener, SceneBor
         this.lives = lives;
     }
 
-    /**
-     * Stelt de beweging van de (sprite) speler in, rekening houdend met de booster.
-     * @param speed     the speed as a {@code double}
-     * @param direction the direction in degrees as a {@code double}
-     */
+   
     @Override
     public void setMotion( double speed, final double direction) {
         boolean boosterActive = booster.isActive();
@@ -111,45 +111,43 @@ public class Player extends DynamicSpriteEntity implements KeyListener, SceneBor
         super.setMotion(speed, direction);
     }
 
-    /**
-     * Reageert op veranderingen in ingedrukte toetsen. Behandelt schieten, bewegen met pijltjestoetsen, boosten en hoogtecontrole.
-     * @param pressedKeys A {@link Set} of {@code KeyCode} representations of the keys that are currently pressed
-     * Voor de leesbaarheid van de code wordt er gebruik gemaakt van constanten uit de Helper class.
-     */
     @Override
-    public void onPressedKeysChange(Set<KeyCode> pressedKeys){
-        if(pressedKeys.contains(KeyCode.SPACE) && canShoot) {
-            if (laserPowerUpActive && System.currentTimeMillis() < laserPowerUpEndTime) {
-                shoot();
-            } else {
-                shoot();
-                canShoot = false;
-            }
-        }
-        if(pressedKeys.contains(Helper.KeyStroke.LEFT)){
-            setMotion(Helper.Speed.HIGH,Helper.Direction.GOLEFT);
-        } else if(pressedKeys.contains(Helper.KeyStroke.RIGHT)){
-            setMotion(Helper.Speed.HIGH,Helper.Direction.GORIGHT);
-        } else if(pressedKeys.contains(Helper.KeyStroke.BOOST) && canShoot){
+    public void onPressedKeysChange(Set<KeyCode> pressedKeys) {
+        handleMovement(pressedKeys);
+        handleShooting(pressedKeys);
+    }
+
+    private void handleMovement(Set<KeyCode> pressedKeys) {
+        if (pressedKeys.contains(Helper.KeyStroke.LEFT)) {
+            setMotion(Helper.Speed.HIGH, Helper.Direction.GOLEFT);
+        } else if (pressedKeys.contains(Helper.KeyStroke.RIGHT)) {
+            setMotion(Helper.Speed.HIGH, Helper.Direction.GORIGHT);
+        } else if (pressedKeys.contains(Helper.KeyStroke.BOOST) && canShoot) {
             activateBooster();
             checkMaxHeight();
-            setMotion(Helper.Speed.HIGH,Helper.Direction.GOUP);
-        } else if(pressedKeys.contains(Helper.KeyStroke.RIGHTBOOST)){
+            setMotion(Helper.Speed.HIGH, Helper.Direction.GOUP);
+        } else if (pressedKeys.contains(Helper.KeyStroke.RIGHTBOOST)) {
             activateBooster();
             checkMaxHeight();
-            setMotion(Helper.Speed.HIGH,Helper.Direction.GORIGHTUP);
-        } else if(pressedKeys.contains(Helper.KeyStroke.LEFTBOOST)){
+            setMotion(Helper.Speed.HIGH, Helper.Direction.GORIGHTUP);
+        } else if (pressedKeys.contains(Helper.KeyStroke.LEFTBOOST)) {
             activateBooster();
             checkMaxHeight();
-            setMotion(Helper.Speed.HIGH,Helper.Direction.GOLEFTUP);
-        } else if(pressedKeys.contains(Helper.KeyStroke.BRAKE)) {
-            setMotion(Helper.Speed.LOW,Helper.Direction.DOWN);
-        }
-        if(!pressedKeys.contains(Helper.KeyStroke.FIRE)) {
-            canShoot = true;
+            setMotion(Helper.Speed.HIGH, Helper.Direction.GOLEFTUP);
+        } else if (pressedKeys.contains(Helper.KeyStroke.BRAKE)) {
+            setMotion(Helper.Speed.LOW, Helper.Direction.DOWN);
         }
     }
 
+    private void handleShooting(Set<KeyCode> pressedKeys) {
+        if (pressedKeys.contains(KeyCode.SPACE) && canShoot) {
+            shoot();
+            canShoot = !laserPowerUpActive || System.currentTimeMillis() >= laserPowerUpEndTime;
+        }
+        if (!pressedKeys.contains(Helper.KeyStroke.FIRE)) {
+            canShoot = true;
+        }
+    }
 
     /**
      * Als op de [W] toets wordt gedrukt activeert deze methode de Booster als deze beschikbaar is.
@@ -183,67 +181,53 @@ public class Player extends DynamicSpriteEntity implements KeyListener, SceneBor
         }
     }
 
-    /**
-     * onCollision(List<Collider> collidingObject):Detecteert botsingen en handelt deze af.
-     * Verhoogt levens bij power-up, activeert laser power-up en vermindert levens bij aanraking met vijanden.
-     * @param collidingObject a {@link List} of all instances of {@link Collider} this {@link Collided} has collided
-     *                         with, during the last Game World Update.
-     */
     @Override
     public void onCollision(List<Collider> collidingObject) {
-
         for (Collider collider : collidingObject) {
-            boolean powerUpCollision = false;
-
-            if (collider instanceof PowerUpLives) { //PowerUpLives
-                lives = lives + 1;
-                updateLives();
-                checkLives();
-                ((PowerUpLives) collider).remove(); //verwijderd de sprite van het scherm
-                break;
-            } else if (collider instanceof PowerUpLaser) { //PowerUpLaserschot x2
-                powerUpCollision = true;
-                activateLaserPowerUp();
-                ((PowerUpLaser) collider).remove(); // verwijderd sprite uit het scherm
-                break;
+            if (collider instanceof PowerUpLives) {
+                handlePowerUpLivesCollision((PowerUpLives) collider);
+            } else if (collider instanceof PowerUpLaser) {
+                handlePowerUpLaserCollision((PowerUpLaser) collider);
             } else if (collider instanceof GameEntities) {
-                setAnchorLocation(new Coordinate2D((getSceneWidth() - getWidth()) / 2, 550));
-                lives = lives - 1;
-                updateLives();
-                checkLives();
-                ((GameEntities) collider).remove();
-                increaseScore(((GameEntities) collider).getPoints());
-                break;
+                handleGameEntitiesCollision((GameEntities) collider);
             } else if (collider instanceof WeaponType) {
-                WeaponType weaponType = (WeaponType) collider;
-
-                // Dont get hit by your own laser beams
-                if (weaponType.isOwnedBy(this)) {
-                    powerUpCollision = true;
-                } else {
-                    weaponType.remove();
-                }
+                handleWeaponTypeCollision((WeaponType) collider);
             }
-
-//            if(!powerUpCollision) {
-//                setAnchorLocation(new Coordinate2D((getSceneWidth() - getWidth()) / 2, 550));
-//                lives = lives - 1;
-//                updateLives();
-//                checkLives();
-//            }
         }
-
-
-
     }
 
-    /**
-     * updateLives(): Update de levens tekst op het scherm.
-     */
-    private void updateLives() {
-        TextEntity playerLivesText;
+    private void handlePowerUpLivesCollision(PowerUpLives powerUpLives) {
+        lives++;
+        updateLivesText();
+        checkLives();
+        powerUpLives.remove();
+    }
+
+    private void handlePowerUpLaserCollision(PowerUpLaser powerUpLaser) {
+        activateLaserPowerUp();
+        powerUpLaser.remove();
+    }
+
+    private void handleGameEntitiesCollision(GameEntities gameEntity) {
+        setAnchorLocation(new Coordinate2D((getSceneWidth() - getWidth()) / 2, 550));
+        lives--;
+        updateLivesText();
+        checkLives();
+        gameEntity.remove();
+        increaseScore(gameEntity.getPoints());
+    }
+
+    private void handleWeaponTypeCollision(WeaponType weaponType) {
+        if (!weaponType.isOwnedBy(this)) {
+            weaponType.remove();
+        }
+    }
+
+    private void updateLivesText() {
         gameScreen.getPlayerLivesText().setText(": " + this.getLives());
     }
+
+
 
     /**
      * checkMaxHeight(): Controleert of de speler niet te hoog boost.
@@ -279,7 +263,6 @@ public class Player extends DynamicSpriteEntity implements KeyListener, SceneBor
      * updateScore: update de tekst van de score zodat deze kan worden weergegeven op het gameScherm
      */
     private void updateScore() {
-        TextEntity scoreText;
         gameScreen.getScoreText().setText("Score: " + getScore());
     }
 
