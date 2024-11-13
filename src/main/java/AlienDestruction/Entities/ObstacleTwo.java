@@ -15,14 +15,7 @@ import java.util.List;
  * De ObstacleOne klasse vertegenwoordigt een obstakel van type 2 in een game.
  *  * Het erft van de GameEntities klasse die de basis functionaliteit voor game-elementen verzorgt.
  */
-public class ObstacleTwo extends GameEntities{
-
-    /**
-     *  Player player is final:
-     *  Dit betekent dat de ObstacleTwo-instantie altijd een geldige referentie naar de Player-instantie heeft.
-     *  Dit voorkomt dat er fouten optreden door null-waarden of ongeldige verwijzingen.
-     *  */
-    private final Player player;
+public class ObstacleTwo extends Obstacle{
 
     /**
      * ObstacleTwo(Coordinate2D location, Player player): Initialiseert de ObstacleTwo met een afbeelding, locatie, grootte en referentie naar de speler.
@@ -32,7 +25,11 @@ public class ObstacleTwo extends GameEntities{
       */
     public ObstacleTwo(Coordinate2D location, Player player) {
         super("sprites/asteroidRectangleV1.png", location, new Size(Helper.Size.HUGE,Helper.Size.LARGE), player);
-        this.player = player;
+        /**
+         *  Player player is final:
+         *  Dit betekent dat de ObstacleTwo-instantie altijd een geldige referentie naar de Player-instantie heeft.
+         *  Dit voorkomt dat er fouten optreden door null-waarden of ongeldige verwijzingen.
+         *  */
         setMotion(Helper.Speed.LOW, getCourse(this.getAnchorLocation().getX()));
         this.setRotationSpeed(Helper.getRandomDouble(-0.6, 0.6));
     }
@@ -46,15 +43,6 @@ public class ObstacleTwo extends GameEntities{
     public void setNewColliderDirection(WeaponType collider, double rotate, double direction){
         (collider).setRotate(rotate);
         (collider).setDirection(direction);
-    }
-
-    @Override
-    public void onCollision(List<Collider> collidingObject) {
-        for (Collider collider : collidingObject){
-            if (collider instanceof LaserBeam){
-                bounceOffT((WeaponType) collider);
-            }
-        }
     }
 
 
