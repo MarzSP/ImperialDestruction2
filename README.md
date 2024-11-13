@@ -1,6 +1,6 @@
 Work in progress!<br>
 An object oriented adventure, written in Java. Using the HAN Yaeger Game Engine.<br>
-Since creating this game in june 2024, i've learnt a lot and thought it was time to make a version 2. <br> Refactoring, reducing code smells, improving structure ect. <br>
+Since creating this game in june 2024, i've learnt a fair amount and thought it was time to make a version 2. <br> Refactoring, reducing code smells, improving structure ect. <br>
 
 Refactored:<br>
 App<br>
